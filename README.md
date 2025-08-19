@@ -93,7 +93,7 @@ npm run dev
 
  Groups & contests
 
- Learning Journal
+## Learning Journal
 
 This project is part of my Backend Mastery Plan. Each week focuses on building real-world features while improving backend skills, Prisma ORM usage, AI integration, and production-grade practices.
 
@@ -115,10 +115,10 @@ Week	Focus	Key Learnings & Tasks
 6	Polishing & Deployment	- Improved EJS frontend & user experience
 - Learned environment management, deployment, and logging
 - Finalized README & documentation for portfolio
- Contribution
+## Contribution
 
 Pull requests are welcome. For major changes, please open an issue first to discuss.
 
- License
+## License
 
 MIT License © 2025 Your Name
