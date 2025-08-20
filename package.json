@@ -1,0 +1,32 @@
+{
+  "name": "book-note-v2",
+  "version": "1.0.0",
+  "description": "A **social platform for book lovers**, built with **Node.js, Express, Prisma ORM, and PostgreSQL**.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liateg/Book-Note-v2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/liateg/Book-Note-v2/issues"
+  },
+  "homepage": "https://github.com/liateg/Book-Note-v2#readme",
+  "devDependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "prisma": "^6.14.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.14.0"
+  }
+}
