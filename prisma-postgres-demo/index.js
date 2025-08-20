@@ -26,7 +26,7 @@ app.get("/users", async (req, res) => {
   res.json(users);
 });
 
-// ✅ Get single user by ID
+//  Get single user by ID
 app.get("/users/:id", async (req, res) => {
   const { id } = req.params;
   const user = await prisma.user.findUnique({
