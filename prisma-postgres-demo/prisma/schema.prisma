@@ -20,3 +20,11 @@ model User {
   emails String @unique
 }
 
+
+// id (PK)
+// name
+// email (unique)
+// username (unique)
+// passwordHash
+// avatarUrl (optional)
+// createdAt
