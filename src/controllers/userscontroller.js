@@ -34,4 +34,33 @@ export const getUsers = async (req, res) => {
   res.json(users);
 };
 
-// ... (other functions same pattern)
+// get user by id
+
+export const getUser= async (req,res)=>{
+  const { id } = req.params;
+ const user = await prisma.user.findUnique({
+    where: { id: parseInt(id) },
+  });
+  if (user) res.json(user);
+  else res.status(404).json({ error: "User not found" });
+}
+
+export const editUser=async(req,res)=>{
+  const {id}=req.params
+  const {email,name,password}=req.body
+  const user=await prisma.user.editUser({
+    where:{id:parseInt(id)},
+    data:{email,name,password}
+  })
+   if (user) res.json(user);
+  else res.status(404).json({ error: "User not found" });
+}
+
+export const deleteUser=async (req,res)=>{
+  const {id}=req.params
+  const user=await prisma.user.deleteUser({
+    where:{id:parseInt(id)}
+  })
+   if (user) res.json(user);
+  else res.status(404).json({ error: "User not found" });
+}
