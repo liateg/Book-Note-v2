@@ -1,29 +1,28 @@
-// rigister,login,get user,edit profile,delete user
-//   name         String
-//   username     String    @unique
-//   email        String    @unique
-//   passwordHash String
-
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { sanitize } from "../utils/sanitize";
 
 const prisma = new PrismaClient();
 const saltRounds = 10;
 export const createUser = async (req, res) => {
   try {
-    const { name, email,password} = req.body;
-    bcrypt.hash(password,saltRounds,async(err,passwordHash)=>{
-      if(err){
-        console.error("Errore hasing",err.stack)
-      }else{
-  const user = await prisma.user.create({
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "Name, email, and password are required." });
+    }
+
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    const user = await prisma.user.create({
       data: { name, email, passwordHash },
     });
-    res.json(user);
-      }
-    })
-  
+
+    // Hide passwordHash before returning
+    const safeUser=sanitize(user)
+    res.status(201).json(safeUser);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -31,7 +30,8 @@ export const createUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   const users = await prisma.user.findMany();
-  res.json(users);
+const safeUsers=users.map(sanitize(users))
+  res.json(safeUsers);
 };
 
 // get user by id
@@ -41,26 +41,31 @@ export const getUser= async (req,res)=>{
  const user = await prisma.user.findUnique({
     where: { id: parseInt(id) },
   });
-  if (user) res.json(user);
+  if (user) {  const safeUser=sanitize(user)
+  res.json(safeUser);}
   else res.status(404).json({ error: "User not found" });
 }
 
 export const editUser=async(req,res)=>{
   const {id}=req.params
   const {email,name,password}=req.body
-  const user=await prisma.user.editUser({
+  const user=await prisma.user.update({
     where:{id:parseInt(id)},
     data:{email,name,password}
   })
-   if (user) res.json(user);
+   if (user) {const safeUser=sanitize(user)
+    res.json(safeUser)
+   }
   else res.status(404).json({ error: "User not found" });
 }
 
 export const deleteUser=async (req,res)=>{
   const {id}=req.params
-  const user=await prisma.user.deleteUser({
+  const user=await prisma.user.delete({
     where:{id:parseInt(id)}
   })
-   if (user) res.json(user);
+   if (user) {const safeUser=sanitize(user)
+    res.json(safeUser)
+   }
   else res.status(404).json({ error: "User not found" });
 }
