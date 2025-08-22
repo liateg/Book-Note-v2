@@ -16,38 +16,40 @@ export const creatPost=async (req,res)=>{
         title: book.title,
         author_name: book.author_name ? book.author_name.join(", ") : "Unknown",
         
-        rate: rate,
-        notes: notes,
+        
+        
         cover_id: book.cover_i ? book.cover_i : null,
         cover_edition_key: book.cover_edition_key
           ? book.cover_edition_key
           : null,
         isbn: book.isbn ? book.isbn[0] : null,
         edition_key: book.edition_key ? book.edition_key[0] : null,
-        review: review,
+       
       };
       const book_model={
         title:bookData.title,
-        rate:bookData.rate,
+      
         cover_id:bookData.cover_id,
         cover_edition_key:bookData.cover_edition_key,
-        edition_key:bookData.edition_key
+        edition_key:bookData.edition_key,
+        ISBN:bookData.isbn,
       }
      const authorsArray = bookData.author_name.split(",").map(name => name.trim());
     
-const book_= await prisma.book.creat({
+const book_= await prisma.book.create({
     data:{
        ...book_model 
     }
 })
-
+let authors=[]
 for (const author of authorsArray) {
-  await prisma.bookAuthor.create({
+  const authorI=await prisma.bookAuthor.create({
     data: {
       name: author,
       
     },
   });
+  authors.push(authorI) 
 }
 
 const note=await prisma.note.create({
@@ -63,7 +65,7 @@ const post=await prisma.post.create({
        reviewText:review 
     }
 })
-    
+return res.status(502).json({success: true,data:{books:book_,authors:authors, note:note,post:post } })    
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
     }
