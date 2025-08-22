@@ -1,16 +1,21 @@
 import { PrismaClient } from "@prisma/client";
+
+
+// use `prisma` in your application to read and write data in your DB
 import bcrypt from "bcrypt";
-import { sanitize } from "../utils/sanitize";
+import { sanitize } from "../utils/sanitize.js";
 
 const prisma = new PrismaClient();
 const saltRounds = 10;
 
 // Create user
 export const createUser = async (req, res) => {
+  console.log(`recived ${req.body}`)
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password ,username} = req.body;
+    console.log(req.body)
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !username) {
       return res.status(400).json({ success: false, error: "Name, email, and password are required." });
     }
 
@@ -22,7 +27,7 @@ export const createUser = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     const user = await prisma.user.create({
-      data: { name, email, passwordHash },
+      data: { name, email, passwordHash,username },
     });
 
     const safeUser = sanitize(user);
