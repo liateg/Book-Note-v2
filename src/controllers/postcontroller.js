@@ -55,6 +55,14 @@ const note=await prisma.note.create({
 noteText:bookData.notes
     }
 })
+
+const post=await prisma.post.create({
+    data:{
+       visibility:visiblity,
+       rating:rate,
+       reviewText:review 
+    }
+})
     
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
