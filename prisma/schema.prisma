@@ -110,6 +110,9 @@ model Book {
   coverUrl      String?
   publishedYear Int?
   ISBN          String?  @unique
+  edition_key String? @unique
+  cover_edition_key String? @unique
+  cover_id String? @unique
   createdAt     DateTime @default(now())
 
   authors    BookAuthor[]
