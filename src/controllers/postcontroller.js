@@ -12,6 +12,7 @@ export const creatPost=async (req,res)=>{
     const book = json.docs[0];
     console.log("Book data fetched:", book);
     if (book) {
+      console.log("We go the book")
       const bookData = {
         title: book.title,
         author_name: book.author_name ? book.author_name.join(", ") : "Unknown",
@@ -29,7 +30,7 @@ export const creatPost=async (req,res)=>{
       const book_model={
         title:bookData.title,
       
-        cover_id:bookData.cover_id,
+        cover_id:String(bookData.cover_id),
         cover_edition_key:bookData.cover_edition_key,
         edition_key:bookData.edition_key,
         ISBN:bookData.isbn,
@@ -41,31 +42,42 @@ const book_= await prisma.book.create({
        ...book_model 
     }
 })
+console.log("book added")
 let authors=[]
 for (const author of authorsArray) {
   const authorI=await prisma.bookAuthor.create({
     data: {
       name: author,
-      
+        book: {
+      connect: { id: book_.id }, // link this author to the created book
+    },
     },
   });
   authors.push(authorI) 
 }
-
+console.log("authers added")
 const note=await prisma.note.create({
     data:{
-noteText:bookData.notes
+noteText:notes,
+  book: {
+      connect: { id: book_.id }, // link this author to the created book
+    },
+   
     }
 })
-
+console.log("note added")
 const post=await prisma.post.create({
     data:{
        visibility:visiblity,
        rating:rate,
-       reviewText:review 
+       reviewText:review,
+         book: {
+      connect: { id: book_.id }, // link this author to the created book
+    }, 
     }
 })
-return res.status(502).json({success: true,data:{books:book_,authors:authors, note:note,post:post } })    
+console.log("post added")
+return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post } })    
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
     }
@@ -74,4 +86,9 @@ return res.status(502).json({success: true,data:{books:book_,authors:authors, no
 //   publishedYear Int?
 //   ISBN          String?  @unique
 
-}catch{}}
+}catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    res.status(500).json({ success: false, error: error.message });
+  }}
