@@ -161,7 +161,7 @@ const post=await prisma.post.delete({
   where:{id:parseInt(id),userId:parseInt(userId)},
 })
 if(!post) return res.status(404).json({ success: false, error: "Post not found" });
-  return res.status(201).json({ success: tru1, data:post });
+  return res.status(201).json({ success: true, data:post });
   }catch(error) {
 res.status(500).json({ success: false, error: error.message });
   }
