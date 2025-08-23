@@ -114,7 +114,8 @@ export const getPosts=async (req,res)=>{
 
 export const getPost=async (req,res)=>{
 try{
-  const {id}=req.params
+   const { id } = req.params;
+  console.log(id)
   const post=await prisma.post.findUnique({
     where:{id:parseInt(id)}
   })
@@ -131,7 +132,9 @@ try{
 
 export const updatePost=async (req,res)=>{
 try{
-  const {id}=req.params
+  console.log(`on update ${req.params.id}`)
+ const {id}=req.params
+  console.log(`on update5 ${id}`)
   const {userId,bookId,reviewText,rating,visibility} =req.body
 
   const post=await prisma.post.update({
@@ -144,8 +147,22 @@ visibility:visibility
   })
   if(!post) return res.status(404).json({ success: false, error: "Post not found" });
   return res.status(201).json({ success: tru1, data:post });
-}catch{
+}catch(error){
 
+res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const deletPost=async (req,res)=>{
+  try{
+const {id}= req.params
+const {userId}=req.body
+const post=await prisma.post.delete({
+  where:{id:parseInt(id),userId:parseInt(userId)},
+})
+if(!post) return res.status(404).json({ success: false, error: "Post not found" });
+  return res.status(201).json({ success: tru1, data:post });
+  }catch(error) {
 res.status(500).json({ success: false, error: error.message });
   }
 }
