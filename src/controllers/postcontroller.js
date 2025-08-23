@@ -114,11 +114,38 @@ export const getPosts=async (req,res)=>{
 
 export const getPost=async (req,res)=>{
 try{
-  
+  const {id}=req.params
+  const post=await prisma.post.findUnique({
+    where:{id:parseInt(id)}
+  })
+  if(!post) return res.status(404).json({ success: false, error: "Post not found" });
+  return res.status(201).json({ success: true, data:post});
 }catch (error) {
     if (error.code === "P2025") {
-      return res.status(404).json({ success: false, error: "User not found" });
+      return res.status(404).json({ success: false, error: "Post not found" });
     }
     res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+
+export const updatePost=async (req,res)=>{
+try{
+  const {id}=req.params
+  const {userId,bookId,reviewText,rating,visibility} =req.body
+
+  const post=await prisma.post.update({
+    where:{id:parseInt(id),userId:parseInt(userId)},
+    data:{
+reviewText:reviewText,
+rating:rating,
+visibility:visibility
+    }
+  })
+  if(!post) return res.status(404).json({ success: false, error: "Post not found" });
+  return res.status(201).json({ success: tru1, data:post });
+}catch{
+
+res.status(500).json({ success: false, error: error.message });
   }
 }
