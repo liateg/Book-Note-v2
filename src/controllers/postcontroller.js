@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 export const creatPost=async (req,res)=>{
     
     try{
-        const {title,review,visiblity,rate,notes}=req.body
+        const {title,review,visiblity,rate,notes,userId}=req.body
             const data = await fetch(
       `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}`
     );
@@ -62,7 +62,9 @@ noteText:notes,
   book: {
       connect: { id: book_.id }, // link this author to the created book
     },
-   
+    user: {
+      connect: { id: userId }, // link this author to the user
+    },
     }
 })
 console.log("note added")
@@ -73,7 +75,9 @@ const post=await prisma.post.create({
        reviewText:review,
          book: {
       connect: { id: book_.id }, // link this author to the created book
-    }, 
+    },  user: {
+      connect: { id: userId }, // link this author to the user
+    },
     }
 })
 console.log("post added")
@@ -92,3 +96,29 @@ return res.status(201).json({success: true,data:{books:book_,authors:authors, no
     }
     res.status(500).json({ success: false, error: error.message });
   }}
+
+export const getPosts=async (req,res)=>{
+  try{
+    const posts=await prisma.post.findMany()
+    if(!posts){
+      return  res.status(404).json({ success: false, error: "Posts Not found " });
+    }
+    return res.status(201).json({ success: true, data:posts});
+  }catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+export const getPost=async (req,res)=>{
+try{
+  
+}catch (error) {
+    if (error.code === "P2025") {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
