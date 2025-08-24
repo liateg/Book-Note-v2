@@ -81,7 +81,18 @@ const post=await prisma.post.create({
     }
 })
 console.log("post added")
-return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post } })    
+const like=await prisma.like.create({
+  data:{likes:0,
+         post: {
+      connect: { id: post.id }, // link this author to the created book
+    },  user: {
+      connect: { id: userId }, // link this author to the user
+    },
+  }
+})
+
+
+return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like } })    
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
     }
@@ -99,7 +110,11 @@ return res.status(201).json({success: true,data:{books:book_,authors:authors, no
 
 export const getPosts=async (req,res)=>{
   try{
-    const posts=await prisma.post.findMany()
+    const posts=await prisma.post.findMany({
+        include: {
+    likes: true, // fetch all related Like objects
+  },
+    })
     if(!posts){
       return  res.status(404).json({ success: false, error: "Posts Not found " });
     }
@@ -117,7 +132,10 @@ try{
    const { id } = req.params;
   console.log(id)
   const post=await prisma.post.findUnique({
-    where:{id:parseInt(id)}
+    where:{id:parseInt(id)},
+      include: {
+    likes: true, // fetch all related Like objects
+  },
   })
   if(!post) return res.status(404).json({ success: false, error: "Post not found" });
   return res.status(201).json({ success: true, data:post});
@@ -146,7 +164,7 @@ visibility:visibility
     }
   })
   if(!post) return res.status(404).json({ success: false, error: "Post not found" });
-  return res.status(201).json({ success: tru1, data:post });
+  return res.status(201).json({ success: true, data:post });
 }catch(error){
 
 res.status(500).json({ success: false, error: error.message });
