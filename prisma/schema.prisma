@@ -59,6 +59,7 @@ model Post {
     comments Comment[] @relation("PostComments")
     likes Like[] @relation("Postlikes")
     aicontents AiContent[] @relation("Postaicontents")
+    
 
 }
 
@@ -90,6 +91,7 @@ model Like {
   postId    Int
   user      User     @relation(fields: [userId], references: [id])
   userId    Int
+  likes Int 
   createdAt DateTime @default(now())
 }
 
