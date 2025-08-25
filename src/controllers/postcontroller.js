@@ -95,7 +95,7 @@ const aiSummeryI=await generateSummary([bookData.title,bookData.author_name])
 const aiSummeryO=await prisma.aiContent.create({
   data:{
     book:{
-      connec,t: {id:book.id}
+      connect: {id:book_.id}
     },
     post:{
       connect:{id:post.id}
@@ -105,7 +105,7 @@ const aiSummeryO=await prisma.aiContent.create({
   }
 })
 
-return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like } })    
+return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like ,aiSummery:aiSummeryO} })    
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
     }
