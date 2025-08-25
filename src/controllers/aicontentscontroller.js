@@ -1,5 +1,8 @@
-import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const genSummery=async(req,res)=>{
 
