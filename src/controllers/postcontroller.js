@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import generateSummary from "./aicontentscontroller"
+import {generateSummary} from "./aicontentscontroller.js"
 
 export const creatPost=async (req,res)=>{
     
