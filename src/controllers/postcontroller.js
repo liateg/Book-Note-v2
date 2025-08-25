@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import {generateSummary} from "./aicontentscontroller.js"
+import {generateSummary,generateLable} from "./aicontentscontroller.js"
 
 export const creatPost=async (req,res)=>{
     
@@ -92,6 +92,7 @@ const like=await prisma.like.create({
   }
 })
 const aiSummeryI=await generateSummary([bookData.title,bookData.author_name])
+const aiLabelI=await generateLable([bookData.title,bookData.author_name])
 const aiSummeryO=await prisma.aiContent.create({
   data:{
     book:{
@@ -105,7 +106,19 @@ const aiSummeryO=await prisma.aiContent.create({
   }
 })
 
-return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like ,aiSummery:aiSummeryO} })    
+const aiLabelO=await prisma.aiContent.create({
+  data:{
+    book:{
+      connect: {id:book_.id}
+    },
+    post:{
+      connect:{id:post.id}
+    },
+    type:"LABEL",
+    content:aiLabelI
+  }
+})
+return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like ,aiSummery:aiSummeryO,aiLabel:aiLabelO} })    
     }else{
         return res.status(404).json({ success: false, error: "Book not found" });
     }
