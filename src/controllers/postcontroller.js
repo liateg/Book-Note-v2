@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import generateSummary from "./aicontentscontroller"
 
 export const creatPost=async (req,res)=>{
     
@@ -90,7 +91,19 @@ const like=await prisma.like.create({
     },
   }
 })
-
+const aiSummeryI=await generateSummary([bookData.title,bookData.author_name])
+const aiSummeryO=await prisma.aiContent.create({
+  data:{
+    book:{
+      connec,t: {id:book.id}
+    },
+    post:{
+      connect:{id:post.id}
+    },
+    type:"SUMMARY",
+    content:aiSummeryI
+  }
+})
 
 return res.status(201).json({success: true,data:{books:book_,authors:authors, note:note,post:post,like:like } })    
     }else{
