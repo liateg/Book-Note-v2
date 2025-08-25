@@ -20,3 +20,5 @@ export const generateSummary=async (text)=> {
     return null; // fail gracefully
   }
 }
+
+// export const generateLable
