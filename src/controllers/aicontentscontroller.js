@@ -7,7 +7,7 @@ const client = new OpenAI({
 export const generateSummary=async (text)=> {
   try {
     const response = await client.chat.completions.create({
-      model: "gpt-4o-mini", // cheaper, faster; you can also use "gpt-4o"
+      model: "gpt-4o-mini", 
       messages: [
         { role: "system", content: "You are a helpful assistant that summarizes book reviews into short, clear summaries." },
         { role: "user", content: `Summarize this review in 2-3 sentences:\n\n${text}` },
@@ -17,8 +17,22 @@ export const generateSummary=async (text)=> {
     return response.choices[0].message.content;
   } catch (error) {
     console.error("AI Summary Error:", error);
-    return null; // fail gracefully
+    return res.status(500).json({ success: false, error: error.message });
   }
 }
 
-// export const generateLable
+export const generateLable=async (text)=>{
+    try{
+const response=await client.chat.completions.create({
+      model: "gpt-4o-mini", 
+      messages: [
+        { role: "system", content: "You are a helpful assistant that labels book into genures." },
+        { role: "user", content: `Label this book:\n\n${text}` },
+      ],
+})
+return response.choices[0].message.content
+    }catch(error){
+    console.error("AI Summary Error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+}
