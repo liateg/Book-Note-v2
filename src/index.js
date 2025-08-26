@@ -5,7 +5,7 @@ import postRoutes from "./routes/posts.js"
 import likeRoutes from "./routes/likes.js"
 
 const app = express();
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 3000;
 
 
 app.use(express.json());
