@@ -1,61 +1,77 @@
 
-#  Book Note-v2
+# Book Note-v2
 
-A **social platform for book lovers**, built with **Node.js, Express, Prisma ORM, and PostgreSQL**.  
+A **social platform for book lovers**, built with **Node.js, Express, Prisma ORM, and PostgreSQL**.
 
-Users can:  
-- Add books they’ve read (manually or via external API)  
-- Write **private notes** or **public reviews**  
-- Rate books, like and comment on public posts  
-- Discover **trending books** based on engagement  
-- Generate **AI-powered summaries & labels** for books  
-- Tag books with **genres and moods**  
-- Create **groups** around shared reading interests  
-- (Optional) Host **contests** like reading challenges  
+Users can:
+
+* Add books they’ve read (via OpenLibrary API)
+* Write **public reviews** or **private notes**
+* Rate books
+* Generate **AI-powered summaries & labels** for books
+* Tag books with authors
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
-- **Backend**: Node.js, Express.js  
-- **Database**: PostgreSQL with Prisma ORM  
-- **Frontend**: EJS templates + CSS (static, lightweight)  
-- **AI Integration**: OpenAI API (summaries, mood/genre labels)  
-- **Search**: PostgreSQL Full-Text Search (fuzzy matching)  
-- **Auth**: JWT-based authentication  
+* **Backend**: Node.js, Express.js
+* **Database**: PostgreSQL with Prisma ORM
+* **AI Integration**: OpenAI API for automatic summaries and labels
 
 ---
 
-##  Project Structure
+## Project Structure
 
-```
-
+```bash
 booknote/
 ├─ prisma/             # Prisma schema + migrations
 ├─ src/
-│  ├─ config/         # Database + app config
-│  ├─ routes/         # Express routes
-│  ├─ controllers/    # Request handlers
-│  ├─ services/       # Business logic (AI, book API, search, etc.)
-│  ├─ middlewares/    # Authentication, validation
-│  ├─ utils/          # Helpers (logger, error handler)
-│  └─ models/         # Prisma model wrappers (optional)
-├─ public/             # Static assets
-├─ README.md           # Project documentation
+│  ├─ controllers/    # Request handlers (users, posts, AI)
+│  ├─ routes/         # Express API routes
+│  
+├─ node_modules/
+├─ .env
 ├─ package.json
-└─ .env
-
-````
+├─ package-lock.json
+└─ README.md
+```
 
 ---
 
-##  Setup Instructions
+## Features Implemented
 
-1. **Clone repo**  
+### Users
+
+* Create, update, delete, and list users
+
+### Books & Authors
+
+* Fetch book info automatically from OpenLibrary API
+* Store book details in database
+* Store multiple authors per book
+
+### Posts & Notes
+
+* Users can create posts (reviews) with rating and visibility (public/private)
+* Users can create multiple private notes linked to books
+
+### AI Features
+
+* Automatic generation of **book review summaries** using OpenAI
+* Automatic **book labels** (AI classification)
+* AI content saved in database linked to post and book
+
+---
+
+## Setup Instructions
+
+1. **Clone repo**
+
 ```bash
 git clone https://github.com/your-username/booknote.git
 cd booknote
-````
+```
 
 2. **Install dependencies**
 
@@ -73,7 +89,7 @@ npx prisma init
 
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/booknote"
-OPENAI_API_KEY="your_api_key_here"
+OPENAI_API_KEY="your_openai_api_key_here"
 ```
 
 5. **Run migrations**
@@ -90,41 +106,57 @@ npm run dev
 
 ---
 
-## 🔮 Roadmap
+## API Endpoints
 
-* [ ] User auth & profile system
-* [ ] Add/Review/Rate books
-* [ ] AI-powered summaries + labels
-* [ ] Like/comment on reviews
-* [ ] Trending books feed
-* [ ] Groups & contests
+### Users
+
+* `POST /users` – create a user
+* `GET /users` – list users
+* `GET /users/:id` – get user by ID
+* `PUT /users/:id` – update user
+* `DELETE /users/:id` – delete user
+
+### Posts
+
+* `POST /posts` – create a post (auto AI summary & label)
+* `GET /posts` – list posts
+* `GET /posts/:id` – get post by ID
+* `PUT /posts/:id` – update post
+* `DELETE /posts/:id` – delete post
+
+### Notes
+
+* `POST /notes` – add note for a book
+* `GET /notes/:id` – get note by ID
+* `PUT /notes/:id` – update note
+* `DELETE /notes/:id` – delete note
+
+### Books & Authors
+
+* `GET /books` – list books
+* `GET /books/:id` – get book details
+* `GET /authors` – list authors
 
 ---
 
-##  Learning Journal
+## Next Steps (Roadmap)
 
-This project is part of my **Backend Mastery Plan**.
 
-| Week | Focus                              | Key Learnings & Tasks                                                                                                                                               |
-| ---- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | Project Setup & Core Features      | Designed ERD & Prisma schema. Setup Express + Prisma + PostgreSQL. Implemented user auth & book posting system. Learned to structure folders for maintainable code. |
-| 2    | Reviews, Notes, and AI Integration | Added AI summaries & labels for books. Built private/public notes functionality. Learned API integration & async data handling.                                     |
-| 3    | Social Features                    | Implemented likes & comments. Built trending book feed. Learned relational queries in Prisma.                                                                       |
-| 4    | Groups & Contests                  | Created groups (book clubs) and contest structures. Learned advanced Prisma relations & joins.                                                                      |
-| 5    | Search & Optimization              | Added full-text fuzzy search for books and posts. Learned query optimization and indexing in PostgreSQL.                                                            |
-| 6    | Polishing & Deployment             | Improved EJS frontend & user experience. Learned environment management, deployment, and logging. Finalized README & documentation for portfolio.                   |
+* Enhance feed with **trending books** based on engagement
+* Add **search** with fuzzy matching
+* Optional: host reading **contests/challenges**
 
 ---
 
-##  Contribution
+## Contribution
 
-Pull requests are welcome. For major changes, please open an issue first to discuss.
+Pull requests are welcome. For major changes, open an issue to discuss first.
 
 ---
 
-##  License
+## License
 
 MIT License © 2025 Your Name
 
-```
+---
 
